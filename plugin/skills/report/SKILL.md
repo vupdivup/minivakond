@@ -19,7 +19,7 @@ Follow the `workspace` skill's conventions; load it first if it isn't loaded yet
 - Write the SQL to a file and run it read-only:
   `./tools/duckdb.exe data/work.duckdb -readonly -f <file>.sql`
   - Quick answers: use `data/scratch.sql`.
-  - Saved reports: use `reports/<YYYY-MM-DD>_<slug>/query.sql`.
+  - Chart and report pages: use one file per dataset in `reports/<YYYY-MM-DD>_<slug>/`, e.g. `by_month.sql`. Each holds exactly one `SELECT` and no dot commands (see 4). Run them once with `.mode markdown` from `data/scratch.sql` if you want to read the results first.
 - **Sanity-check before answering:**
   - Do parts add up to the total?
   - Is the row count plausible?
@@ -31,8 +31,8 @@ Follow the `workspace` skill's conventions; load it first if it isn't loaded yet
 | Need | Output |
 |---|---|
 | A number or a small table (≲ 15 rows) | Markdown table in the chat. No files. |
-| A trend, comparison or breakdown | HTML chart page (see 4) |
-| A multi-section report | HTML report page (see 4) |
+| A trend, comparison or breakdown, or "make a chart" | Chart page: one chart, nothing else (see 4) |
+| "Make a report", a monthly summary, several views at once | Report page: KPIs, several charts and tables (see 4) |
 | "Put it in Excel" / data to work with | `LOAD excel;` then `COPY (SELECT ...) TO 'reports/<folder>/<name>.xlsx' WITH (FORMAT xlsx, HEADER true);` (works with `-readonly`) |
 
 **Excel exports:**
@@ -42,23 +42,24 @@ Follow the `workspace` skill's conventions; load it first if it isn't loaded yet
 
 ## 4. HTML charts and reports
 
-1. Copy `${CLAUDE_SKILL_DIR}/template.html` into the report folder as `report.html` and fill in the `DATA` block:
-   - title, subtitle (data as-of and source)
-   - KPI tiles
-   - charts: Chart.js, with data inlined as JSON
-   - table
-   - assumptions
+**The template is the design.** Every page uses `tools/report_template.html`, unchanged. You never write or edit HTML, CSS or JavaScript for a report, and you never type numbers into the page.
 
-   All text is in Hungarian. Put **raw numbers** in `DATA` (`124000000`, not `"124 000 000 Ft"`). The template formats them with `hu-HU` locale using each value's `fmt`: `"ft"`, `"eur"`, `"num"`, `"pct"` or `"date"`.
-2. Keep it self-contained: no external files other than the Chart.js CDN script already in the template.
-3. **Show it:**
-   - Publish `report.html` as an Artifact. Follow the Artifact tool's own instructions (it may ask you to load design guidance first). Updating a recurring report republishes to the same file path, which keeps the same link.
+**Deliver what was asked.** A chart request gets a chart page: one section with one chart, plus title, as-of date and assumptions. No KPIs, extra charts or tables. Offer those as the follow-up suggestion (6.4) instead.
+
+1. Read `${CLAUDE_SKILL_DIR}/spec.md` for the spec format.
+2. Write the SQL files (see 2) and `reports/<folder>/report.json` with the Write tool. All text in the spec is Hungarian, with the user's terms from the *Szótár*.
+3. Build the page:
+   `powershell -NoProfile -ExecutionPolicy Bypass -File tools/build_report.ps1 reports/<folder>/report.json`
+   - It prints the row count of each query; check them as in 2.
+   - If it fails, fix the spec or the SQL and run it again. If the page can't express what the user wants, tell the user instead of editing `report.html`.
+4. **Show it:**
+   - Publish `report.html` as an Artifact. Don't call the Artifact tool's `quickstart` and don't load `artifact-design` or other design guidance for reports: their generic advice doesn't apply to this page. The template's own `<!doctype>`/`<head>`/`<body>` skeleton is intentional; keep it. Updating a recurring report means re-running the build and republishing the same file path, which keeps the same link.
    - If the Artifact tool isn't available or publishing fails, open it locally: `start reports/<folder>/report.html` (Bash) or `Invoke-Item reports/<folder>/report.html` (PowerShell).
    - **Only aggregated numbers go into published pages.** No row-level or personal data, ever.
 
 ## 5. Record
 
-- For saved reports, write `notes.md` in the report folder, in Hungarian, covering:
+- For chart and report pages and Excel exports, write `notes.md` in the report folder, in Hungarian, covering:
   - the question in the user's words
   - rules applied (R-IDs)
   - assumptions

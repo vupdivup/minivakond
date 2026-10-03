@@ -1,6 +1,7 @@
 # Creates or repairs a Minivakond workspace in the current folder.
 # Safe to re-run: user files (rules, data, reports) are only created when missing;
-# plugin-owned files (tools/*.ps1, .claude/minivakond-version) are always refreshed.
+# plugin-owned files (tools/*.ps1, tools/report_template.html, .claude/minivakond-version)
+# are always refreshed.
 $ErrorActionPreference = 'Stop'
 $assets  = Join-Path $PSScriptRoot 'assets'
 $root    = Resolve-Path (Join-Path $PSScriptRoot '..\..')
@@ -26,9 +27,9 @@ if (-not (Test-Path 'CLAUDE.md')) {
     [IO.File]::AppendAllText("$PWD\CLAUDE.md", "`n`n$pointer", $utf8); "updated  CLAUDE.md"
 }
 
-# Plugin-owned helper scripts: always refresh.
-Copy-Item (Join-Path $assets 'tools\*.ps1') 'tools' -Force
-"refreshed tools\*.ps1"
+# Plugin-owned helper scripts and report template: always refresh.
+Copy-Item (Join-Path $assets 'tools\*') 'tools' -Force
+"refreshed tools\"
 
 if (-not (Test-Path 'tools\duckdb.exe')) {
     "installing duckdb..."

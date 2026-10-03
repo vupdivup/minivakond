@@ -7,7 +7,7 @@ description: Creates a new "Minivakond" workspace in the current folder, or repa
 
 Setup is safe to run any number of times.
 - **The user's files are created only when missing, never overwritten:** rules, data, reports, settings.
-- **The plugin's own files are always refreshed:** the helper scripts in `tools/` and the version marker.
+- **The plugin's own files are always refreshed:** the helper scripts and report template in `tools/`, and the version marker.
 
 ## Steps
 
@@ -18,7 +18,7 @@ Setup is safe to run any number of times.
 
    It does four things:
    - creates the folders and missing starter files (including `CLAUDE.md` and `.claude/settings.json`)
-   - refreshes `tools/*.ps1`
+   - refreshes the helper scripts and the report template in `tools/`
    - downloads the DuckDB command-line tool into `tools/` if it's missing
    - writes `.claude/minivakond-version`
 
