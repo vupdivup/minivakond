@@ -97,8 +97,8 @@ data/work.duckdb            the database; disposable, rebuilt every session
 rules/business_rules.md     rules, glossary, data facts, preferences, open questions (human-readable)
 rules/views.sql             the same rules as v_* views (machine side)
 reports/log.md              one line per question answered
-reports/<date>_<slug>/      query.sql, notes.md, and report.html / .xlsx
-tools/                      duckdb.exe and helper scripts (owned by the plugin; setup refreshes them)
+reports/<date>_<slug>/      *.sql, notes.md, and report.json + report.html / .xlsx
+tools/                      duckdb.exe, helper scripts and the report template (owned by the plugin; setup refreshes them)
 ```
 
 ## Running queries
