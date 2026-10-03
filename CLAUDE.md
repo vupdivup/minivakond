@@ -8,17 +8,17 @@ Claude Code plugin that lets non-technical (mostly Hungarian) business users que
   - `.claude-plugin/plugin.json` — manifest. `version` is the source of truth for workspace upgrades.
   - `skills/workspace/` — conventions + session-start routine. Every other skill loads it first.
   - `skills/setup/` — creates/repairs a workspace. `setup.ps1` copies `assets/` into the user's folder.
-    - `assets/` — workspace template: starter SQL (`data/`, `rules/`), `CLAUDE.md.tmpl`, `.claude/settings.json`, `tools/*.ps1`.
+    - `assets/` — workspace template: starter SQL (`data/`, `rules/`), `CLAUDE.md.tmpl`, `.claude/settings.json`, `tools/` (helper scripts, `build_report.ps1` + `report_template.html`).
   - `skills/ingest/` — loads a file into `raw_<name>` table + `v_<name>` view; handles Hungarian CSV quirks (cp1250, `;`, decimal comma, `YYYY.MM.DD.`).
   - `skills/clarify/` — finds data ambiguities, records answers in `rules/business_rules.md` / `rules/views.sql`.
-  - `skills/report/` — answers questions; `template.html` is the chart/report page.
+  - `skills/report/` — answers questions; `spec.md` documents the `report.json` format that `tools/build_report.ps1` turns into a chart/report page.
 - `scripts/build.ps1` — zips `plugin/` into `dist/minivakond-<version>.plugin` for upload in the desktop app.
 
 ## Key concepts
 
 - **Workspace** = a user folder marked by `.claude/minivakond-version`. Not this repo.
 - **Two CLAUDE.md files**: this one (dev) vs. `plugin/skills/setup/assets/CLAUDE.md.tmpl` (installed into user workspaces). Don't mix them up.
-- **File ownership in a workspace**: user-owned starters are created only if missing; plugin-owned files (`tools/*.ps1`, version marker) are always overwritten. Keep this split when adding assets.
+- **File ownership in a workspace**: user-owned starters are created only if missing; plugin-owned files (files from `assets/tools/`, version marker) are always overwritten. Keep this split when adding assets.
 - **Upgrades**: workspaces re-run setup when their marker differs from `plugin.json` `version`, so bump the version when assets or `tools/` change.
 - User-facing text defaults to Hungarian; internal names (tables, columns, folders) are ASCII English snake_case.
 - Files are UTF-8 without BOM (Hungarian accents). PowerShell's `Get-Content` may display them garbled; that's a display issue, not file corruption.
