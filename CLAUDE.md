@@ -13,8 +13,6 @@ Claude Code plugin that lets non-technical (mostly Hungarian) business users que
   - `skills/clarify/` — finds data ambiguities, records answers in `rules/business_rules.md` / `rules/views.sql`.
   - `skills/report/` — answers questions; `template.html` is the chart/report page.
 - `scripts/build.ps1` — zips `plugin/` into `dist/minivakond-<version>.plugin` for upload in the desktop app.
-- `.github/workflows/release.yml` — on a `v*` tag push, builds the plugin and publishes a GitHub Release with the `.plugin` attached.
-- `.claude/skills/release/` — dev-only `release` skill (not shipped): bump PR, then tag.
 
 ## Key concepts
 
@@ -29,13 +27,6 @@ Claude Code plugin that lets non-technical (mostly Hungarian) business users que
 
 - Build package: `powershell -File scripts/build.ps1`
 - No tests. To try a change, build, upload the plugin in the desktop app, and run it in an empty folder.
-
-## Release
-
-- Use the `release` skill.
-- The flow has two steps. First, a PR changes only `version` in `plugin.json` (commit `chore: release vX.Y.Z`). After that PR is merged, push a `vX.Y.Z` tag on `main`.
-- The workflow fails if the tag doesn't match `plugin.json`. Never tag without the bump.
-- Versioning is semver, judged from the actual diff since the last tag, not from commit types. Breaking changes bump major, new capabilities bump minor, and everything else bumps patch. While on `0.x`, a breaking change bumps minor.
 
 ## Communication
 
