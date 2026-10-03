@@ -1,0 +1,6 @@
+-- One block per dataset, maintained by the ingest skill.
+-- Each block loads one file from data/raw/ into a raw_<name> table.
+-- Example:
+-- -- sales: monthly sales export from the ERP (sheet "Data", header on row 3)
+-- CREATE OR REPLACE TABLE raw_sales AS
+-- SELECT * FROM read_xlsx('data/raw/sales.xlsx', sheet = 'Data', range = 'A3:M100000', header = true);

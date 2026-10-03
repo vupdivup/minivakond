@@ -1,0 +1,3 @@
+dist/
+*.duckdb
+*.duckdb.wal

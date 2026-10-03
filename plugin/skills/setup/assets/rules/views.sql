@@ -1,0 +1,10 @@
+-- Business rules as views. Questions are answered from v_* views only.
+-- Maintained by the ingest skill (pass-through views) and the clarify skill (rules).
+-- Tag every rule with its ID from business_rules.md, e.g.:
+--
+-- CREATE OR REPLACE VIEW v_sales AS
+-- SELECT
+--     *,
+--     amount - coalesce(discount, 0) AS net_revenue          -- R-001
+-- FROM raw_sales
+-- WHERE status <> 'cancelled';                               -- R-002

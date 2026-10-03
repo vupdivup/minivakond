@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./tools/duckdb.exe:*)",
+      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -File tools/list_sheets.ps1:*)",
+      "Edit(./rules/**)",
+      "Edit(./reports/**)",
+      "Edit(./data/load.sql)",
+      "Edit(./data/scratch.sql)"
+    ],
+    "deny": [
+      "Edit(./data/raw/**)"
+    ]
+  }
+}
