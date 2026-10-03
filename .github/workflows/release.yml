@@ -35,6 +35,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           # A version with a suffix (e.g. 0.2.0-rc.1) is a prerelease.
-          $extra = if ($env:VERSION -like '*-*') { @('--prerelease') } else { @() }
+          # Pass it as --prerelease=<bool>: splatting an array into gh mangles the flag.
+          $prerelease = if ($env:VERSION -like '*-*') { 'true' } else { 'false' }
           gh release create $env:GITHUB_REF_NAME "dist/minivakond-$env:VERSION.plugin" `
-              --title "Minivakond $env:VERSION" --generate-notes @extra
+              --title "Minivakond $env:VERSION" --generate-notes "--prerelease=$prerelease"
