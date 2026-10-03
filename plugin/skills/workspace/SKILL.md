@@ -103,7 +103,8 @@ tools/                      duckdb.exe and helper scripts (owned by the plugin; 
 
 ## Running queries
 
-- Always write SQL to a file **with the Write tool**, then run it. This avoids quoting problems in the shell. Don't write SQL files from PowerShell: its UTF-8 output adds a byte-order mark that breaks DuckDB's dot-commands.
+- Create and change workspace files (`rules/*`, `data/*.sql`, `reports/**`) **only with the Edit/Write tools**. Never write them from the shell: no PowerShell `Set-Content`/`Out-File`, no Python, no `sed`. PowerShell adds a byte-order mark that breaks DuckDB's dot-commands and can garble Hungarian accents; Python is usually not installed.
+- Always write SQL to a file with the Write tool, then run it. This avoids quoting problems in the shell.
   `./tools/duckdb.exe data/work.duckdb -readonly -f path/to/query.sql`
 - Start query files with `.mode markdown` when you want readable output.
 - Any query file that reads or writes `.xlsx` must begin with `LOAD excel;`. Any file that reads a non-UTF-8 CSV must begin with `LOAD encodings;`. Extensions are per-session, so loading them in `build.sql` doesn't carry over.
