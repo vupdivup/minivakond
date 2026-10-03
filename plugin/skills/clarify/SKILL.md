@@ -52,6 +52,8 @@ Use these as lenses, not as a questionnaire. For each one, run a query to see wh
 
 ## How to record (immediately, before using the answer)
 
+Change both files with the Edit tool, never from the shell.
+
 1. **`rules/business_rules.md`** (in the user's language):
    - Add the rule under *Definíciók és szabályok* (definitions & rules) with the next free ID: `**R-00N Name** — rule in plain words. Confirmed: <date>.`
    - If the user used a word of their own for the concept, add it to the *Szótár* (glossary) with its meaning and internal column name. From then on, use exactly that word in all answers and reports.
