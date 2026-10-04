@@ -104,7 +104,7 @@ reports/<date>_<slug>/      SQL files, notes.md, report.json + report.html / .xl
 tools/                      duckdb.exe, helper scripts, report template
 ```
 
-**File ownership.** User-owned starter files (`data/`, `rules/`, `reports/`, settings, `CLAUDE.md`) are created only when missing and never overwritten. Plugin-owned files (everything from `assets/tools/` and the version marker) are always refreshed.
+**File ownership.** User-owned starter files (`data/`, `rules/`, `reports/`, `CLAUDE.md`) are created only when missing and never overwritten. Plugin-owned files (everything from `assets/tools/`, `.claude/settings.json` and the version marker) are always refreshed.
 
 **Upgrades.** When the marker differs from `version` in `plugin.json`, the next session re-runs setup. Bump the version whenever `assets/` or `tools/` change.
 
