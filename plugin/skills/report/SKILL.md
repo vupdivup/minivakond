@@ -33,6 +33,7 @@ Follow the `workspace` skill's conventions; load it first if it isn't loaded yet
 | A number or a small table (≲ 15 rows) | Markdown table in the chat. No files. |
 | A trend, comparison or breakdown, or "make a chart" | Chart page: one chart, nothing else (see 4) |
 | "Make a report", a monthly summary, several views at once | Report page: KPIs, several charts and tables (see 4) |
+| "Make it a PDF" / something to print or attach | Chart or report page, then a PDF of it (see 4.5) |
 | "Put it in Excel" / data to work with | `LOAD excel;` then `COPY (SELECT ...) TO 'reports/<folder>/<name>.xlsx' WITH (FORMAT xlsx, HEADER true);` (works with `-readonly`) |
 
 **Excel exports:**
@@ -57,6 +58,11 @@ Follow the `workspace` skill's conventions; load it first if it isn't loaded yet
    - After publishing, always call the Artifact tool with `action: "open"` and the URL from the publish result, so the page shows without a click. This overrides the tool's default guidance that a fresh publish needs no `open`.
    - If the Artifact tool isn't available or publishing fails, open it locally: `start reports/<folder>/report.html` (Bash) or `Invoke-Item reports/<folder>/report.html` (PowerShell).
    - **Only aggregated numbers go into published pages.** No row-level or personal data, ever.
+5. **PDF, only when asked** ("PDF-ben", "nyomtatható", "csatolni akarom"):
+   `powershell -NoProfile -ExecutionPolicy Bypass -File tools/export_pdf.ps1 reports/<folder>/report.html`
+   - It writes `report.pdf` next to the page (A4 portrait). Give the user its path; don't publish the PDF.
+   - Use this instead of the desktop app's export button. That button turns the page into images and cuts tables, charts and even lines of text in half at page edges; this script keeps cards and table rows whole and the text selectable.
+   - If it says Edge isn't found, tell the user to open `report.html` in a browser, press Ctrl+P and choose *Mentés PDF-ként*.
 
 ## 5. Record
 
