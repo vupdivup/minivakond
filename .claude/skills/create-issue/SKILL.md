@@ -5,7 +5,7 @@ description: Opens a GitHub issue with a root cause analysis and a proposed fix.
 
 # Create issue
 
-The user invoking this skill counts as asking to open the issue. Show the draft and wait for the user's OK before running `gh issue create`.
+The user invoking this skill counts as asking to open the issue. Create it directly; don't show a draft first.
 
 ## 1. Understand the problem
 
@@ -77,4 +77,4 @@ To close duplicates or rejected issues, use `gh issue close --reason "not planne
 gh issue create --title "<title>" --label <label> --body-file <tmp-file>
 ```
 
-Write the body to a temp file first to keep Markdown and backticks intact. Give the user the issue link.
+Write the body to a temp file first to keep Markdown and backticks intact. Then give the user the issue link and a short summary (title, label, recommended option), so they can check it and edit it on GitHub if needed.
