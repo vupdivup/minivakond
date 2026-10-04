@@ -71,7 +71,7 @@ Follow the `workspace` skill's conventions; load it first if it isn't loaded yet
 
 ## 6. Reply
 
-Reply in Hungarian, with Hungarian number and date formatting, using the user's own terms from the *Szótár*.
+Reply in Hungarian (or in the user's language if they write in another one), with Hungarian number and date formatting, using the user's own terms from the *Szótár*.
 
 1. Headline: the answer in one or two sentences, with the key number.
 2. The table, chart link, or file location.

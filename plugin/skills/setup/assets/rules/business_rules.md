@@ -19,7 +19,7 @@ Minden szabálynak saját azonosítója van (R-001, R-002, …), amely soha nem 
 -->
 
 ## Beállítások
-- **Nyelv:** magyar
+<!-- A felhasználó általános kérései, pl. hogyan szeretné látni a számokat. -->
 
 ## Nyitott kérdések
 <!-- Eldöntetlen kérdések, és a közben használt feltételezés. -->
