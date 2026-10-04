@@ -118,6 +118,7 @@ All live in `plugin/skills/setup/assets/tools/` and are copied into the workspac
 | `copy_raw.ps1` | Copies a source file into `data/raw/`, which the Edit and Write tools can't touch. |
 | `list_sheets.ps1` | Lists the sheet names of an `.xlsx` file (DuckDB can't). |
 | `build_report.ps1` | Runs the SQL files named in `report.json` and renders `report.html` from `report_template.html`. No number is typed by hand. |
+| `export_pdf.ps1` | Prints `report.html` to an A4 `report.pdf` with headless Edge, so CSS page breaks apply. The desktop app's own export rasterises the page and ignores them (#37). |
 
 ### Golden rules
 
