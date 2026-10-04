@@ -6,19 +6,23 @@
 <title>Riport</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  :root {
+  /* .theme-light keeps the light palette for the off-screen chart snapshots used in print. */
+  :root, .theme-light {
     --bg: #fbfaf8; --surface: #ffffff; --text: #1f1e1c; --muted: #6b6862; --border: #e6e3dd;
     --s1: #3b6fb6; --s2: #d0743c; --s3: #4f9a6a; --s4: #9a5fb0; --s5: #c4a23a; --s6: #5f8f9f;
   }
-  @media (prefers-color-scheme: dark) {
+  /* Dark theme is screen-only: print drops backgrounds, so light text would vanish on paper. */
+  @media screen and (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #1a1918; --surface: #232220; --text: #ecebe8; --muted: #a29f98; --border: #3a3835;
       --s1: #6f9be0; --s2: #e8955f; --s3: #74c08e; --s4: #c08ad6; --s5: #e0c260; --s6: #85b8c8;
     }
   }
-  :root[data-theme="dark"] {
-    --bg: #1a1918; --surface: #232220; --text: #ecebe8; --muted: #a29f98; --border: #3a3835;
-    --s1: #6f9be0; --s2: #e8955f; --s3: #74c08e; --s4: #c08ad6; --s5: #e0c260; --s6: #85b8c8;
+  @media screen {
+    :root[data-theme="dark"] {
+      --bg: #1a1918; --surface: #232220; --text: #ecebe8; --muted: #a29f98; --border: #3a3835;
+      --s1: #6f9be0; --s2: #e8955f; --s3: #74c08e; --s4: #c08ad6; --s5: #e0c260; --s6: #85b8c8;
+    }
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--text);
@@ -48,6 +52,21 @@
   footer div { border-top: 1px solid var(--border); padding-top: 12px; }
   footer .icon { font-family: ui-monospace, Consolas, monospace; margin-right: 6px; padding: 2px 6px;
                  background: color-mix(in srgb, var(--border) 50%, transparent); border-radius: 4px; }
+  /* Live canvases don't survive printing (resize clears them), so print shows static snapshots. */
+  .print-img { display: none; }
+  .print-host { position: fixed; left: -10000px; top: 0; width: 720px; }
+  @media print {
+    body { background: #fff; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    main { max-width: none; padding: 0; }
+    footer { max-width: none; padding: 0; }
+    .chart, .print-host { display: none !important; }
+    .print-img { display: block; width: 100%; height: auto; }
+    .table-wrap { overflow: visible; }
+    table { font-size: 12px; }
+    th, td { white-space: normal; padding: 6px 8px; }
+    .card, .kpi, tr { break-inside: avoid; }
+    h2 { break-after: avoid; }
+  }
 </style>
 </head>
 <body>
@@ -106,8 +125,8 @@ const fmt = (v, f) => v == null || v === "" ? "" :
 // Compact axis ticks: 52 M Ft, 1,2 Mrd Ft
 const compact = v => nf({ notation: "compact", maximumFractionDigits: 1 }).format(v);
 
-const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const palette = () => ["--s1","--s2","--s3","--s4","--s5","--s6"].map(css);
+// Reads a colour token as inherited by `node`, so a chart inside .theme-light gets the light palette.
+const css = (n, node = document.documentElement) => getComputedStyle(node).getPropertyValue(n).trim();
 const rows = sql => {
   if (!RESULTS[sql]) throw new Error("Nincs adat ehhez: " + sql);
   return RESULTS[sql];
@@ -167,8 +186,11 @@ function chartData(spec) {
            sets: spec.series.map(s => ({ ...s, values: data.map(r => num(r[s.col])) })) };
 }
 
-function renderChart({ canvas, spec }) {
-  const colors = palette();
+// `still`: draw once without animation at print resolution, for a snapshot.
+function renderChart({ canvas, spec }, still = false) {
+  const tok = n => css(n, canvas);
+  const colors = ["--s1","--s2","--s3","--s4","--s5","--s6"].map(tok);
+  const muted = tok("--muted"), border = tok("--border");
   const { labels, sets } = chartData(spec);
   const doughnut = spec.type === "doughnut";
   const horizontal = !!spec.horizontal && !doughnut;
@@ -178,18 +200,19 @@ function renderChart({ canvas, spec }) {
     v => compact(v) + (f === "ft" ? " Ft" : f === "eur" ? " €" : "");
   canvas.parentElement.style.height = horizontal ? Math.max(240, labels.length * 28 + 60) + "px" : "";
 
-  Chart.defaults.color = css("--muted");
-  Chart.defaults.borderColor = css("--border");
+  // Colours go on each chart, not Chart.defaults: screen and snapshot charts use different palettes.
   Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+  const axis = o => ({ ...o, border: { color: border }, grid: { color: border, ...o.grid },
+                       ticks: { color: muted, ...o.ticks } });
 
   const zero = spec.beginAtZero !== false;
   const scales = doughnut ? {} : {
-    [horizontal ? "y" : "x"]: { stacked, grid: { display: false } },
-    [horizontal ? "x" : "y"]: { stacked, beginAtZero: zero, ticks: { callback: tick(spec.fmt) } }
+    [horizontal ? "y" : "x"]: axis({ stacked, grid: { display: false } }),
+    [horizontal ? "x" : "y"]: axis({ stacked, beginAtZero: zero, ticks: { callback: tick(spec.fmt) } })
   };
   if (!doughnut && !horizontal && sets.some(s => s.axis === "y2")) {
-    scales.y2 = { position: "right", beginAtZero: zero, grid: { drawOnChartArea: false },
-                  ticks: { callback: tick(spec.fmt2 || spec.fmt) } };
+    scales.y2 = axis({ position: "right", beginAtZero: zero, grid: { drawOnChartArea: false },
+                       ticks: { callback: tick(spec.fmt2 || spec.fmt) } });
   }
 
   return new Chart(canvas, {
@@ -203,7 +226,7 @@ function renderChart({ canvas, spec }) {
           type, label: s.name, data: s.values,
           ...(s.axis === "y2" && !horizontal ? { yAxisID: "y2" } : {}),
           backgroundColor: doughnut ? colors : c,
-          borderColor: doughnut ? css("--surface") : c,
+          borderColor: doughnut ? tok("--surface") : c,
           borderWidth: type === "line" ? 2 : 1, tension: 0.25, pointRadius: 2,
           order: type === "line" ? 0 : 1
         };
@@ -213,8 +236,9 @@ function renderChart({ canvas, spec }) {
       locale: LOCALE,
       indexAxis: horizontal ? "y" : "x",
       maintainAspectRatio: false,
+      ...(still ? { animation: false, devicePixelRatio: 2 } : {}),
       plugins: {
-        legend: { display: sets.length > 1 || doughnut },
+        legend: { display: sets.length > 1 || doughnut, labels: { color: muted } },
         tooltip: { callbacks: { label: c =>
           `${doughnut ? c.label : c.dataset.label}: ${fmt(c.raw, fmtOf(sets[c.datasetIndex]))}` } }
       },
@@ -238,8 +262,10 @@ try {
     if (s.text) main.append(el("p", "text", s.text));
     if (s.chart) {
       const card = el("div", "card"), box = el("div", "chart"), canvas = el("canvas");
-      box.append(canvas); card.append(box); main.append(card);
-      charts.push({ canvas, spec: s.chart });
+      const img = el("img", "print-img");
+      img.alt = s.heading || "";
+      box.append(canvas); card.append(box, img); main.append(card);
+      charts.push({ canvas, img, spec: s.chart });
     }
     if (s.table) main.append(renderTable(s.table));
   }
@@ -261,6 +287,23 @@ const drawAll = () => {
   instances = charts.map(renderChart);
 };
 drawAll();
+
+// Print shows a still image of each chart, drawn once off-screen in the light palette,
+// because exporters snapshot the page before Chart.js redraws a resized canvas.
+const printHost = el("div", "print-host theme-light");
+document.body.append(printHost);
+for (const { img, spec } of charts) {
+  const box = el("div", "chart"), canvas = el("canvas");
+  box.append(canvas); printHost.append(box);
+  try {
+    const chart = renderChart({ canvas, spec }, true);
+    img.src = chart.toBase64Image();
+    chart.destroy();
+  } catch (e) { console.error(e); }
+  box.remove();
+}
+printHost.remove();
+
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawAll);
 new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 </script>
