@@ -54,7 +54,7 @@ Use these as lenses, not as a questionnaire. For each one, run a query to see wh
 
 Change both files with the Edit tool, never from the shell.
 
-1. **`rules/business_rules.md`** (in the user's language):
+1. **`rules/business_rules.md`** (in Hungarian):
    - Add the rule under *Definíciók és szabályok* (definitions & rules) with the next free ID: `**R-00N Name** — rule in plain words. Confirmed: <date>.`
    - If the user used a word of their own for the concept, add it to the *Szótár* (glossary) with its meaning and internal column name. From then on, use exactly that word in all answers and reports.
    - Add a line to the *Döntésnapló* (decision log).
@@ -66,4 +66,4 @@ Change both files with the Edit tool, never from the shell.
 3. **Rebuild and verify:** run `./tools/duckdb.exe data/work.duckdb -f data/build.sql`, then run a quick query showing the rule took effect (e.g. the new total).
 4. Confirm to the user in one line, naming the rule ID.
 
-General preferences the user states (e.g. language, how they like numbers shown) go under *Beállítások* (preferences). They don't get an R-ID.
+General preferences the user states (e.g. how they like numbers shown) go under *Beállítások* (preferences). They don't get an R-ID.

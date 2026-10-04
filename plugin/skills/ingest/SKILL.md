@@ -79,7 +79,7 @@ Then work out **what this file can and cannot answer.** For example, rates or pe
 - Include a 5-row preview as a markdown table, using the **original** column headers and the user's number and date formatting.
 - Ask only about columns whose meaning is genuinely unclear. Don't ask about obvious ones.
 - Tell the user what the file can answer and, briefly, what it can't without additional data.
-- Write what you learned under *Adatismertető* (data facts) in `rules/business_rules.md`, in the user's language: source, grain (what one row is), column mapping and meanings, quirks, file encoding, coverage gaps.
+- Write what you learned under *Adatismertető* (data facts) in `rules/business_rules.md`, in Hungarian: source, grain (what one row is), column mapping and meanings, quirks, file encoding, coverage gaps.
 - Problems from step 4 that affect calculations go to the **clarify** skill. Batch them; don't fire them one by one.
 
 ## 6. Close

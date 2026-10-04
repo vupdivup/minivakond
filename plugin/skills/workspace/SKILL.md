@@ -31,9 +31,9 @@ A workspace is a small data project for **a business user who is not technical**
 
 ## Language
 
-- **Everything the user sees is in the language set under *Beállítások* (Preferences) in `rules/business_rules.md`.** The default is Hungarian.
-  - This covers chat, questions and their options, status messages, reports, chart labels, Excel column headers, `notes.md`, `reports/log.md` and `business_rules.md`.
-  - If the user writes to you in another language, follow them for that conversation.
+- **Workspaces are Hungarian.** Everything you write into files is in Hungarian: reports, chart labels, Excel column headers, `notes.md`, `reports/log.md` and `business_rules.md`.
+  - Chat, questions and their options, and status messages are in Hungarian too. If the user writes to you in another language, reply in that language for that conversation, but keep files and reports in Hungarian.
+  - Older workspaces may have a *Nyelv* (language) line under *Beállítások* (Preferences) in `rules/business_rules.md`. Ignore it.
 - **Internal names stay ASCII English snake_case**: tables, views, columns, folder names. Write `revenue`, not `árbevétel`. The original column headers are recorded under *Adatismertető* (Data facts). Display names in reports and exports come from there and from the *Szótár* (Glossary).
 - **Use the user's own terms.** If the *Szótár* says they call it "forgalom", say "forgalom" everywhere, never a synonym.
 - **Use these fixed phrases verbatim** so recurring sections always look the same:
