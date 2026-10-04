@@ -54,6 +54,7 @@ Follow the `workspace` skill's conventions; load it first if it isn't loaded yet
    - If it fails, fix the spec or the SQL and run it again. If the page can't express what the user wants, tell the user instead of editing `report.html`.
 4. **Show it:**
    - Publish `report.html` as an Artifact. Don't call the Artifact tool's `quickstart` and don't load `artifact-design` or other design guidance for reports: their generic advice doesn't apply to this page. The template's own `<!doctype>`/`<head>`/`<body>` skeleton is intentional; keep it. Updating a recurring report means re-running the build and republishing the same file path, which keeps the same link.
+   - After publishing, always call the Artifact tool with `action: "open"` and the URL from the publish result, so the page shows without a click. This overrides the tool's default guidance that a fresh publish needs no `open`.
    - If the Artifact tool isn't available or publishing fails, open it locally: `start reports/<folder>/report.html` (Bash) or `Invoke-Item reports/<folder>/report.html` (PowerShell).
    - **Only aggregated numbers go into published pages.** No row-level or personal data, ever.
 
