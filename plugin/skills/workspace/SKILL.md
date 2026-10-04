@@ -21,7 +21,7 @@ A workspace is a small data project for **a business user who is not technical**
 
    Setup only adds or refreshes the plugin's own files. It never touches the user's data or rules.
 2. Rebuild the database: `./tools/duckdb.exe data/work.duckdb -f data/build.sql`
-3. Greet the user with a short status:
+3. Greet the user. Start with the session header on its own line, then a short status:
    - which datasets are loaded, with row counts and the date range they cover
    - how many business rules are recorded
    - any open questions (*Nyitott kérdések*) in `rules/business_rules.md`
@@ -38,6 +38,7 @@ A workspace is a small data project for **a business user who is not technical**
 
   | Purpose | Hungarian |
   |---|---|
+  | Session header (level-2 heading) | `` ## `(˙●˙)` Minivakond `` |
   | Assumptions heading | **Feltételezések** |
   | Rules applied | **Alkalmazott szabályok** |
   | Data as of | **Adatok állapota:** |

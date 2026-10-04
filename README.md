@@ -1,4 +1,4 @@
-# Minivakond
+# `(˙●˙)` Minivakond
 
 A Claude Code plugin that lets non-technical business users ask plain-language questions about their CSV and Excel files. It targets Hungarian users and runs on Windows only.
 
