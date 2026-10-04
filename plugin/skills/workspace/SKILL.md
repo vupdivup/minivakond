@@ -86,7 +86,8 @@ A workspace is a small data project for **a business user who is not technical**
 
 ```
 CLAUDE.md                   short pointer to this skill (written by setup)
-.claude/settings.json       permissions (written by setup)
+.claude/settings.json       permissions (owned by the plugin; setup overwrites it)
+.claude/settings.local.json user-specific permissions (never touched by setup)
 .claude/minivakond-version  workspace marker + plugin version it was set up with
 inbox/                      user drops new files here
 data/raw/                   originals (read-only)

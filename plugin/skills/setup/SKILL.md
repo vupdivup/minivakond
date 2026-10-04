@@ -6,8 +6,8 @@ description: Creates a new "Minivakond" workspace in the current folder, or repa
 # Setup / doctor
 
 Setup is safe to run any number of times.
-- **The user's files are created only when missing, never overwritten:** rules, data, reports, settings.
-- **The plugin's own files are always refreshed:** the helper scripts and report template in `tools/`, and the version marker.
+- **The user's files are created only when missing, never overwritten:** rules, data, reports.
+- **The plugin's own files are always refreshed:** the helper scripts and report template in `tools/`, `.claude/settings.json`, and the version marker. User-specific permissions belong in `.claude/settings.local.json`, which setup never touches.
 
 ## Steps
 
@@ -17,8 +17,8 @@ Setup is safe to run any number of times.
    `powershell -NoProfile -ExecutionPolicy Bypass -File "${CLAUDE_SKILL_DIR}/setup.ps1"`
 
    It does four things:
-   - creates the folders and missing starter files (including `CLAUDE.md` and `.claude/settings.json`)
-   - refreshes the helper scripts and the report template in `tools/`
+   - creates the folders and missing starter files (including `CLAUDE.md`)
+   - refreshes the helper scripts and the report template in `tools/`, and `.claude/settings.json`
    - downloads the DuckDB command-line tool into `tools/` if it's missing
    - writes `.claude/minivakond-version`
 

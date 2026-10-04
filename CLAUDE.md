@@ -18,7 +18,7 @@ Claude Code plugin that lets non-technical (mostly Hungarian) business users que
 
 - **Workspace** = a user folder marked by `.claude/minivakond-version`. Not this repo.
 - **Two CLAUDE.md files**: this one (dev) vs. `plugin/skills/setup/assets/CLAUDE.md.tmpl` (installed into user workspaces). Don't mix them up.
-- **File ownership in a workspace**: user-owned starters are created only if missing; plugin-owned files (files from `assets/tools/`, version marker) are always overwritten. Keep this split when adding assets.
+- **File ownership in a workspace**: user-owned starters are created only if missing; plugin-owned files (files from `assets/tools/`, `.claude/settings.json`, version marker) are always overwritten. Keep this split when adding assets.
 - **Upgrades**: workspaces re-run setup when their marker differs from `plugin.json` `version`, so bump the version when assets or `tools/` change.
 - User-facing text is Hungarian (chat may follow the user's language, files and reports may not); internal names (tables, columns, folders) are ASCII English snake_case.
 - Files are UTF-8 without BOM (Hungarian accents). PowerShell's `Get-Content` may display them garbled; that's a display issue, not file corruption.
