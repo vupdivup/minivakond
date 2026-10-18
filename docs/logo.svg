@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 400 400">
+  <defs>
+    <clipPath id="frame"><rect x="12" y="12" width="376" height="376" rx="64"/></clipPath>
+    <g id="mole">
+      <ellipse cx="180" cy="284" rx="100" ry="134"/>
+      <ellipse cx="262" cy="192" rx="56" ry="32" transform="rotate(-12 262 192)"/>
+    </g>
+  </defs>
+  <g clip-path="url(#frame)">
+    <rect width="400" height="400" fill="#FFE600"/>
+    <use xlink:href="#mole" fill="#111" stroke="#111" stroke-width="28" stroke-linejoin="round"/>
+    <use xlink:href="#mole" fill="#E8322B"/>
+    <circle cx="218" cy="180" r="10" fill="#111"/>
+    <circle cx="318" cy="176" r="20" fill="#FF6FB1" stroke="#111" stroke-width="12"/>
+    <rect x="-10" y="306" width="420" height="120" fill="#7BC943" stroke="#111" stroke-width="14"/>
+    <g fill="#111">
+      <ellipse cx="60" cy="342" rx="9" ry="7"/><ellipse cx="140" cy="342" rx="9" ry="7"/>
+      <ellipse cx="220" cy="342" rx="9" ry="7"/><ellipse cx="300" cy="342" rx="9" ry="7"/>
+      <ellipse cx="100" cy="374" rx="9" ry="7"/><ellipse cx="180" cy="374" rx="9" ry="7"/>
+      <ellipse cx="260" cy="374" rx="9" ry="7"/><ellipse cx="340" cy="374" rx="9" ry="7"/>
+    </g>
+  </g>
+  <rect x="12" y="12" width="376" height="376" rx="64" fill="none" stroke="#111" stroke-width="14"/>
+</svg>
