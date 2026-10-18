@@ -42,7 +42,7 @@ The goal is a clean `raw_<name>` table, a `v_<name>` view, and a shared understa
      `SELECT * FROM read_xlsx('data/raw/x.xlsx', sheet='S', header=false, all_varchar=true, range='A1:Z25')`
   4. Watch for: title rows above the header, multi-row headers, merged cells, subtotal/total rows, notes at the bottom, and blank spacer columns. Use `range=` to skip the junk.
 
-Write exploration SQL to `data/scratch.sql` (starting with `LOAD excel;` for .xlsx files, or `LOAD encodings;` for non-UTF-8 CSVs) and run it with `./tools/duckdb.exe data/work.duckdb -readonly -f data/scratch.sql`.
+Explore in `data/scratch.sql`, run as the workspace skill's "Running queries" describes.
 
 ## 3. Load
 
@@ -57,21 +57,9 @@ Write exploration SQL to `data/scratch.sql` (starting with `LOAD excel;` for .xl
 
 ## 4. Profile
 
-Run `SUMMARIZE raw_<name>` plus a row count. Then check the dataset against the nine "Where ambiguity hides" categories in the clarify skill (`${CLAUDE_PLUGIN_ROOT}/skills/clarify/SKILL.md`):
+Run `SUMMARIZE raw_<name>` plus a row count. Then look for problems through the "Where ambiguity hides" lenses in the clarify skill (`${CLAUDE_PLUGIN_ROOT}/skills/clarify/SKILL.md`), querying wherever a lens plausibly applies to this data. Check that the date range matches what the user expects.
 
-1. grain and double counting
-2. which measure
-3. which rows count
-4. time
-5. categories and entities
-6. units
-7. empty values
-8. coverage
-9. relationships
-
-For each category, run a query to see whether the problem actually exists in this data, and note what you find. Also check that the date range matches what the user expects.
-
-Then work out **what this file can and cannot answer.** For example, rates or per-person averages need a full population, and "remaining" or "vs. target" questions need a budget, target or entitlement. Note what's missing.
+Then work out what this file can and cannot answer. For example, rates or per-person averages need a full population, and "remaining" or "vs. target" questions need a budget, target or entitlement. Note what's missing.
 
 ## 5. Confirm meaning with the user
 

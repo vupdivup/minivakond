@@ -7,7 +7,7 @@ description: Resolves ambiguities in how the data should be interpreted, and rec
 
 You're a sharp analyst interviewing a domain expert. They know the business; you know where data goes wrong. Respect their time. Follow the `workspace` skill's conventions (load it first if it isn't loaded yet). In particular, speak in the user's language.
 
-This skill works for **any** kind of data: sales, HR, inventory, finance, operations, survey results. Don't bring a domain checklist. Find the ambiguities **in the data itself**, using the categories below.
+This skill works for any kind of data. Don't bring a domain checklist; find the ambiguities in the data itself, using the lenses below.
 
 ## When to ask
 
@@ -19,25 +19,15 @@ This skill works for **any** kind of data: sales, HR, inventory, finance, operat
 
 Use these as lenses, not as a questionnaire. For each one, run a query to see whether the problem actually exists in this data. Only ask about the ones that do, ordered by how much they change the numbers.
 
-1. **Grain and double counting.** What is one row? Does the file mix several versions or states of the same thing that would be counted twice if summed? Examples: plan vs. actual, draft vs. final, original vs. correction, overlapping snapshots, a total row next to its detail rows.
-   - Signals: a low-cardinality column whose values look like states or versions; the same key and dates appearing more than once.
-2. **Which measure.** Several columns could be "the" number: gross vs. net, calendar vs. counted days, ordered vs. delivered quantity, list vs. paid price. Negative values could be returns, reversals or corrections.
-   - Signals: numeric columns with similar names or correlated values; negatives.
-3. **Which rows count.** Some rows may belong in none of the answers or only some of them: statuses (cancelled, pending), test or dummy records, internal transactions, outliers.
-   - Signals: status-like columns, odd IDs that don't match the usual ID pattern, extreme values.
-4. **Time.**
-   - Which date column defines the period, when there are several?
-   - How do records that span periods get split (start date, end date, pro rata)?
-   - Is the fiscal period different from the calendar year?
-   - Is the file a snapshot, and as of when?
-5. **Categories and entities.**
-   - Inconsistent spellings: leading or trailing spaces, typos, case differences.
-   - Rollups the user thinks in, such as grouping items into divisions or regions.
-   - Entities whose attributes change over time, such as a customer or employee moving between groups. Which one counts: the value at the time of the event, or the current one?
-6. **Units and scale.** Mixed currencies or units, values given in thousands, percentages stored as 0–1 vs. 0–100.
-7. **Empty values.** Does an empty cell mean zero, unknown, or not applicable?
-8. **Coverage and denominators.** Who or what is *not* in the file? Rates, averages and "per X" figures need a population. If the file lists only the items that had an event, the zeros are missing. Say plainly when another file is needed to answer correctly.
-9. **Relationships between datasets.** Which key links them? Can one row match many? What happens to rows that don't match?
+1. **Grain and double counting.** What is one row? Does the file mix versions or states (plan vs. actual, original vs. correction, total rows next to detail rows) that double count when summed?
+2. **Which measure.** Gross vs. net, ordered vs. delivered, list vs. paid. What do negative values mean?
+3. **Which rows count.** Statuses, test records, internal transactions, outliers.
+4. **Time.** Which date defines the period; how records spanning periods split; fiscal vs. calendar year; snapshot date.
+5. **Categories and entities.** Inconsistent spellings; rollups the user thinks in; attributes that change over time (value at the event, or current value?).
+6. **Units and scale.** Mixed currencies, values in thousands, percentages as 0–1 vs. 0–100.
+7. **Empty values.** Zero, unknown, or not applicable?
+8. **Coverage and denominators.** Who or what is *not* in the file? If it lists only items that had an event, the zeros are missing, so rates and averages need another file. Say so plainly.
+9. **Relationships between datasets.** Linking key, one-to-many matches, unmatched rows.
 
 ### Cleanup vs. rules
 
@@ -47,7 +37,7 @@ Use these as lenses, not as a questionnaire. For each one, run a query to see wh
 ## How to ask
 
 1. **Measure before asking.** Run a query to show what is at stake, with numbers formatted for the user's locale. For example: "If we add up both kinds of rows the total is 10 402; counting only one kind it's 5 139." A question with numbers attached is much easier to answer.
-2. **Use AskUserQuestion.** At most 4 questions per batch, each with 2–4 concrete options. Use the user's language and business terms. Put your recommendation first, with the recommended-option suffix from the workspace skill.
+2. **Use AskUserQuestion** with concrete options. Use the user's language and business terms. Put your recommendation first, with the recommended-option suffix from the workspace skill.
 3. If the user doesn't know or wants to decide later, record the item under *Nyitott kérdések* (open questions) with the assumption you'll use meanwhile.
 
 ## How to record (immediately, before using the answer)
