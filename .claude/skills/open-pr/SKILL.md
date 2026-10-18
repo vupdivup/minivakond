@@ -22,7 +22,7 @@ The repo allows only squash merges, so the PR title becomes the commit message o
 
 Read the full diff: `git diff origin/main...HEAD`.
 
-- If anything under `plugin/` changed, run `powershell -File scripts/build.ps1`. The build must print `Built: ...`. If it fails, stop and show the error.
+- If anything under `plugin/` or `.claude-plugin/` changed, run `claude plugin validate .` and `claude plugin validate plugin`. Both must print `Validation passed`. If either fails, stop and show the error.
 - Changed text files must be UTF-8 without BOM. Check that no changed file starts with the bytes `EF BB BF`.
 - Do not bump `version` in `plugin.json`. The `release` skill bumps it in its own PR.
 - Look for leftovers: debug output, commented-out code, TODOs added by this branch, and files that do not belong to the change. Mention them to the user; do not remove them without asking.

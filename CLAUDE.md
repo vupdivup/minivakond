@@ -13,7 +13,7 @@ Claude Code plugin that lets non-technical (mostly Hungarian) business users que
   - `skills/clarify/` — finds data ambiguities, records answers in `rules/business_rules.md` / `rules/views.sql`.
   - `skills/report/` — answers questions; `spec.md` documents the `report.json` format that `tools/build_report.ps1` turns into a chart/report page.
 - `docs/logo.svg` — project logo, used in `README.md`. Not shipped.
-- `scripts/build.ps1` — zips `plugin/` into `dist/minivakond-<version>.plugin` for upload in the desktop app.
+- `.claude-plugin/marketplace.json` — makes this repo a plugin marketplace (`/plugin marketplace add vupdivup/minivakond`). Points at `./plugin`; installs track `main`, so keep `main` releasable.
 
 ## Key concepts
 
@@ -26,8 +26,8 @@ Claude Code plugin that lets non-technical (mostly Hungarian) business users que
 
 ## Commands
 
-- Build package: `powershell -File scripts/build.ps1`
-- No tests. To try a change, build, upload the plugin in the desktop app, and run it in an empty folder.
+- Validate manifests: `claude plugin validate .` (marketplace) and `claude plugin validate plugin` (plugin).
+- No tests. To try a change, open an empty folder and run `claude --plugin-dir <repo>\plugin`. This loads the plugin straight from the working tree for that session; restart `claude` after each edit. Setup only re-runs when the version changes, so to retest it in a used folder, delete `.claude/minivakond-version` first.
 
 ## Communication
 
