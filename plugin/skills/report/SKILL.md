@@ -16,15 +16,10 @@ Follow the `workspace` skill's conventions; load it first if it isn't loaded yet
 ## 2. Query
 
 - Query `v_*` views only. If you need logic that isn't in a view yet and it's a business rule, it belongs in `views.sql` (via clarify), not buried in a one-off query.
-- Write the SQL to a file and run it read-only:
-  `./tools/duckdb.exe data/work.duckdb -readonly -f <file>.sql`
+- Run queries as the workspace skill's "Running queries" describes.
   - Quick answers: use `data/scratch.sql`.
   - Chart and report pages: use one file per dataset in `reports/<YYYY-MM-DD>_<slug>/`, e.g. `by_month.sql`. Each holds exactly one `SELECT` and no dot commands (see 4). Run them once with `.mode markdown` from `data/scratch.sql` if you want to read the results first.
-- **Sanity-check before answering:**
-  - Do parts add up to the total?
-  - Is the row count plausible?
-  - How many rows were excluded by filters or empty values?
-  - Is the date range what the user meant?
+- Sanity-check before answering: totals, row counts, rows excluded by filters or empty values, date range.
 
 ## 3. Pick the output: the lightest one that does the job
 
