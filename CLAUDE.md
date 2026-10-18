@@ -20,24 +20,13 @@ Claude Code plugin that lets non-technical (mostly Hungarian) business users que
 - **Workspace** = a user folder marked by `.claude/minivakond-version`. Not this repo.
 - **Two CLAUDE.md files**: this one (dev) vs. `plugin/skills/setup/assets/CLAUDE.md.tmpl` (installed into user workspaces). Don't mix them up.
 - **File ownership in a workspace**: user-owned starters are created only if missing; plugin-owned files (files from `assets/tools/`, `.claude/settings.json`, version marker) are always overwritten. Keep this split when adding assets.
-- **Upgrades**: workspaces re-run setup when their marker differs from `plugin.json` `version`, so bump the version when assets or `tools/` change.
+- **Versioning**: merging to `main` ships to users, but `/plugin marketplace update` only picks up a new `plugin.json` `version`. Bump it in every PR that changes `plugin/`. Workspaces also re-run setup when their marker differs from this version.
 - User-facing text is Hungarian (chat may follow the user's language, files and reports may not); internal names (tables, columns, folders) are ASCII English snake_case.
 - Files are UTF-8 without BOM (Hungarian accents). PowerShell's `Get-Content` may display them garbled; that's a display issue, not file corruption.
-
-## Commands
-
-- Validate manifests: `claude plugin validate .` (marketplace) and `claude plugin validate plugin` (plugin).
-- No tests. To try a change, open an empty folder and run `claude --plugin-dir <repo>\plugin`. This loads the plugin straight from the working tree for that session; restart `claude` after each edit. Setup only re-runs when the version changes, so to retest it in a used folder, delete `.claude/minivakond-version` first.
 
 ## Communication
 
 - Use the `caveman` skill by default.
-
-## Git
-
-- Never commit unless the user asks.
-- Use conventional commits (`feat:`, `fix:`, `docs:`…).
-- Work on feature branches, not `main`.
 
 ## Documentation
 
