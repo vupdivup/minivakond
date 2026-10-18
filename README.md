@@ -20,10 +20,19 @@ Example (in Hungarian, as the user would see it):
 
 ## Install and use
 
-1. Download the latest `minivakond-<version>.plugin` from [Releases](../../releases).
-2. In the Claude desktop app, open **Customize > Plugins > Add > Upload plugin** and select the file. If the upload is rejected, rename the file to `.zip`; the format is the same.
-3. Open an empty folder in the **Code** tab and say *„állítsd be”* ("set it up"). Setup creates the workspace and downloads DuckDB.
-4. Drop a spreadsheet into `inbox/` (or attach it) and start asking questions.
+1. Install the plugin from the marketplace:
+
+   ```
+   /plugin marketplace add vupdivup/minivakond
+   ```
+
+   ```
+   /plugin install minivakond@minivakond
+   ```
+
+   Run `/plugin marketplace update minivakond` later to get new versions.
+2. Open an empty folder in the **Code** tab and say *„állítsd be”* ("set it up"). Setup creates the workspace and downloads DuckDB.
+3. Drop a spreadsheet into `inbox/` (or attach it) and start asking questions.
 
 ## How it works
 
@@ -71,8 +80,8 @@ plugin/                          everything that ships
     clarify/                     business rules
     report/
       spec.md                    report.json format
-scripts/build.ps1                packages plugin/ into dist/minivakond-<version>.plugin
-.github/workflows/release.yml    builds and publishes a GitHub Release on a v* tag
+.claude-plugin/marketplace.json  marketplace entry, so the repo installs with /plugin marketplace add
+.github/workflows/release.yml    publishes a GitHub Release with notes on a v* tag
 .claude/skills/                  dev-only skills for this repo (create-issue, open-pr, release)
 ```
 
@@ -132,9 +141,9 @@ All live in `plugin/skills/setup/assets/tools/` and are copied into the workspac
 
 ## Development
 
-- **Build:** `powershell -File scripts/build.ps1` writes `dist/minivakond-<version>.plugin`.
-- **Test:** there are no automated tests. Build, upload the plugin in the desktop app, and try it in an empty folder.
-- **Release:** the `release` skill bumps `plugin.json` through a PR, then tags `main`. The tag triggers `release.yml`, which builds the plugin and publishes a GitHub Release. A version with a suffix (e.g. `0.2.0-rc.1`) is published as a prerelease.
+- **Validate:** `claude plugin validate .` checks the marketplace manifest; `claude plugin validate plugin` checks the plugin.
+- **Test:** there are no automated tests. Open an empty folder and run `claude --plugin-dir <repo>\plugin` to load the plugin from the working tree.
+- **Release:** the `release` skill bumps `plugin.json` through a PR. Merging it ships the version to marketplace users. The skill then tags `main`, which triggers `release.yml` to publish a GitHub Release with generated notes. A version with a suffix (e.g. `0.2.0-rc.1`) is published as a prerelease.
 - **Conventions:**
   - Conventional commits (`feat:`, `fix:`, `docs:`…) on feature branches.
   - Files are UTF-8 without BOM.

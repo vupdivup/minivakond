@@ -1,0 +1,23 @@
+{
+  "name": "minivakond",
+  "description": "Ask questions about your spreadsheets in plain language. Loads CSV/Excel files, clarifies business rules with you, and builds answers, charts and reports.",
+  "owner": {
+    "name": "Mátyás Verseghi-Nagy",
+    "email": "185503939+vupdivup@users.noreply.github.com",
+    "url": "https://github.com/vupdivup"
+  },
+  "plugins": [
+    {
+      "name": "minivakond",
+      "source": "./plugin",
+      "description": "Ask questions about your spreadsheets in plain language. Loads CSV/Excel files, clarifies business rules with you, and builds answers, charts and reports.",
+      "author": {
+        "name": "Mátyás Verseghi-Nagy",
+        "email": "185503939+vupdivup@users.noreply.github.com",
+        "url": "https://github.com/vupdivup"
+      },
+      "homepage": "https://github.com/vupdivup/minivakond",
+      "repository": "https://github.com/vupdivup/minivakond"
+    }
+  ]
+}

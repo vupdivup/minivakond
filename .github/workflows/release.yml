@@ -1,5 +1,6 @@
-# Builds the plugin and publishes a GitHub Release when a v* tag is pushed.
+# Publishes a GitHub Release with generated notes when a v* tag is pushed.
 # The tag must match the version in plugin/.claude-plugin/plugin.json.
+# Users install from the marketplace (main), so the release only records what changed.
 name: Release
 
 on:
@@ -11,7 +12,7 @@ permissions:
 
 jobs:
   release:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -25,10 +26,6 @@ jobs:
           }
           "VERSION=$version" >> $env:GITHUB_ENV
 
-      - name: Build
-        shell: pwsh
-        run: ./scripts/build.ps1
-
       - name: Create release
         shell: pwsh
         env:
@@ -37,5 +34,5 @@ jobs:
           # A version with a suffix (e.g. 0.2.0-rc.1) is a prerelease.
           # Pass it as --prerelease=<bool>: splatting an array into gh mangles the flag.
           $prerelease = if ($env:VERSION -like '*-*') { 'true' } else { 'false' }
-          gh release create $env:GITHUB_REF_NAME "dist/minivakond-$env:VERSION.plugin" `
+          gh release create $env:GITHUB_REF_NAME `
               --title "Minivakond $env:VERSION" --generate-notes "--prerelease=$prerelease"

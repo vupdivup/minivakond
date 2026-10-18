@@ -1,14 +1,14 @@
 ---
 name: release
-description: Releases a new version of the Minivakond plugin. Picks the next version, bumps plugin.json through a PR, then tags main so the Release workflow builds and publishes the .plugin file. Use when the user says "release", "cut a release", "ship a new version" or "bump the version".
+description: Releases a new version of the Minivakond plugin. Picks the next version, bumps plugin.json through a PR, then tags main so the Release workflow publishes release notes. Use when the user says "release", "cut a release", "ship a new version" or "bump the version".
 ---
 
 # Release
 
 Releasing has two halves:
 
-1. **Bump**: a PR that changes only `version` in `plugin/.claude-plugin/plugin.json`.
-2. **Tag**: after the PR is merged, push a `v<version>` tag on `main`. The tag triggers `.github/workflows/release.yml`. The workflow checks that the tag matches `plugin.json`, runs `scripts/build.ps1` and creates a GitHub Release with the `.plugin` file attached.
+1. **Bump**: a PR that changes only `version` in `plugin/.claude-plugin/plugin.json`. Users install from the marketplace on `main`, so merging this PR is what ships the version: `/plugin marketplace update` picks it up.
+2. **Tag**: after the PR is merged, push a `v<version>` tag on `main`. The tag triggers `.github/workflows/release.yml`. The workflow checks that the tag matches `plugin.json` and creates a GitHub Release with generated notes.
 
 The user invoking this skill counts as asking for the commit, push and PR below. Confirm with the user before pushing the tag, because the tag publishes the release.
 
@@ -27,7 +27,7 @@ The user invoking this skill counts as asking for the commit, push and PR below.
 
 - Create a branch from up-to-date main: `git switch -c release/v<version> origin/main`.
 - Change only the `version` field in `plugin/.claude-plugin/plugin.json`. Keep the rest of the file byte-for-byte (UTF-8 without BOM, same formatting). Edit the line; do not round-trip the file through `ConvertTo-Json`.
-- Run `powershell -File scripts/build.ps1` as a smoke test. The build must print `Built: ...minivakond-<version>.plugin`.
+- Run `claude plugin validate .` and `claude plugin validate plugin` as a smoke test. Both must print `Validation passed`.
 - Commit with the message `chore: release v<version>`. Push the branch and open a PR with `gh pr create`. In the PR body, list the commits since the last tag.
 - Give the user the PR link and ask them to merge it. Wait for the user to confirm the merge.
 
