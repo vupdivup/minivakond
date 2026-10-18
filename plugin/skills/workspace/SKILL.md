@@ -38,7 +38,7 @@ A workspace is a small data project for **a business user who is not technical**
 
   | Purpose | Hungarian |
   |---|---|
-  | Session header (level-2 heading) | `` ## `(˙●˙)` Minivakond `` |
+  | Session header (level-2 heading) | `` ## Minivakond `` |
   | Assumptions heading | **Feltételezések** |
   | Rules applied | **Alkalmazott szabályok** |
   | Data as of | **Adatok állapota:** |
