@@ -12,6 +12,7 @@ Claude Code plugin that lets non-technical (mostly Hungarian) business users que
   - `skills/ingest/` — loads a file into `raw_<name>` table + `v_<name>` view; handles Hungarian CSV quirks (cp1250, `;`, decimal comma, `YYYY.MM.DD.`).
   - `skills/clarify/` — finds data ambiguities, records answers in `rules/business_rules.md` / `rules/views.sql`.
   - `skills/report/` — answers questions; `spec.md` documents the `report.json` format that `tools/build_report.ps1` turns into a chart/report page.
+- `docs/logo.svg` — project logo, used in `README.md`. Not shipped.
 - `scripts/build.ps1` — zips `plugin/` into `dist/minivakond-<version>.plugin` for upload in the desktop app.
 
 ## Key concepts
