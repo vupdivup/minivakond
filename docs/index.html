@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minivakond</title>
+<meta name="description" content="Kérdezz az Excel- és CSV-fájljaidról hétköznapi nyelven. Telepítés lépésről lépésre, és amit a Minivakond tud: táblázat, diagram, riport, Excel, PDF.">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #FFE600;
+    --red: #E8322B;
+    --green: #7BC943;
+    --pink: #FF6FB1;
+    --ink: #111;
+    --paper: #FFFBEA;
+    --line: 4px;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Rubik, system-ui, sans-serif;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink);
+    background: var(--paper);
+  }
+  strong { font-weight: 600; }
+  a { color: var(--ink); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  a:hover { color: var(--red); }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+
+  /* Hero */
+  header {
+    background: var(--yellow);
+    border-bottom: var(--line) solid var(--ink);
+    padding: 48px 0 40px;
+  }
+  .hero { display: flex; align-items: center; gap: 28px; }
+  .hero img { width: 120px; height: 120px; flex-shrink: 0; }
+  h1 { font-size: 2.6rem; font-weight: 800; line-height: 1.05; margin: 0 0 8px; }
+  .tagline { margin: 0; font-size: 1.15rem; }
+
+  main.wrap { padding-top: 48px; padding-bottom: 72px; }
+  h2 { font-size: 1.6rem; font-weight: 800; margin: 48px 0 16px; }
+  h2:first-child { margin-top: 0; }
+
+  /* Cards */
+  .card {
+    min-width: 0; /* let long commands scroll instead of widening grid columns */
+    background: #fff;
+    border: var(--line) solid var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 6px 6px 0 var(--ink);
+    padding: 20px 24px;
+  }
+  .before { background: var(--pink); }
+  .before ul { margin: 8px 0 0; padding-left: 22px; }
+  .before li { margin: 4px 0; }
+
+  /* Steps */
+  ol.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+  .step { display: grid; grid-template-columns: 56px 1fr; gap: 18px; align-items: start; }
+  .num {
+    width: 56px; height: 56px;
+    border: var(--line) solid var(--ink);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 1.5rem;
+    background: var(--red); color: #fff;
+    margin-top: 8px;
+  }
+  .step:nth-child(3n+2) .num { background: var(--green); color: var(--ink); }
+  .step:nth-child(3n+3) .num { background: var(--yellow); color: var(--ink); }
+  .step h3, .extra h3 { margin: 0 0 6px; font-size: 1.2rem; font-weight: 800; }
+  .step p { margin: 0 0 8px; }
+  .step p:last-child { margin-bottom: 0; }
+  .note { font-size: 0.95rem; opacity: 0.8; }
+
+  /* Command box */
+  .cmd {
+    display: flex; align-items: center; gap: 8px;
+    margin: 10px 0;
+    background: var(--ink); color: #fff;
+    border-radius: 12px;
+    padding: 6px 6px 6px 16px;
+  }
+  p code {
+    font-family: Consolas, "Cascadia Mono", monospace; font-size: 0.9em;
+    background: var(--paper);
+    border: 2px solid var(--ink); border-radius: 6px;
+    padding: 0 6px;
+    white-space: nowrap;
+  }
+  .cmd code {
+    flex: 1; min-width: 0;
+    font-family: Consolas, "Cascadia Mono", monospace; font-size: 0.95rem;
+    overflow-x: auto; white-space: nowrap;
+  }
+  .cmd button {
+    flex-shrink: 0;
+    font: inherit; font-size: 0.85rem; font-weight: 600;
+    background: transparent; color: #fff;
+    border: 2px solid #fff; border-radius: 8px;
+    padding: 4px 12px; cursor: pointer;
+  }
+  .cmd button:hover { background: #fff; color: var(--ink); }
+  .cmd button.done { background: var(--green); border-color: var(--green); color: var(--ink); }
+
+  .say {
+    display: inline-block;
+    background: var(--yellow);
+    border: 3px solid var(--ink); border-radius: 14px 14px 14px 4px;
+    padding: 2px 12px; font-weight: 600;
+  }
+  .btn {
+    display: inline-block; margin-top: 4px;
+    background: var(--red); color: #fff; text-decoration: none; font-weight: 800;
+    border: var(--line) solid var(--ink); border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 8px 18px;
+  }
+  .btn:hover { color: #fff; transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
+
+  .features { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .features h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; font-size: 1.2rem; font-weight: 800; }
+  .features h3::before {
+    content: ""; flex-shrink: 0;
+    width: 16px; height: 16px;
+    border: 3px solid var(--ink); border-radius: 50%;
+    background: var(--red);
+  }
+  .features .card:nth-child(4n+2) h3::before { background: var(--green); }
+  .features .card:nth-child(4n+3) h3::before { background: var(--yellow); }
+  .features .card:nth-child(4n+4) h3::before { background: var(--pink); }
+  .features .card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .features p { margin: 0 0 10px; }
+  .features p:last-child { margin-bottom: 0; }
+
+  .extra { display: grid; gap: 22px; }
+  .extra p { margin: 0 0 8px; }
+  .extra p:last-child { margin-bottom: 0; }
+
+  footer {
+    background: var(--ink); color: #fff;
+    padding: 24px 0; font-size: 0.95rem;
+  }
+  footer a { color: var(--yellow); }
+
+  @media (max-width: 600px) {
+    body { font-size: 17px; }
+    header { padding: 32px 0 28px; }
+    .hero { gap: 16px; }
+    .hero img { width: 80px; height: 80px; }
+    h1 { font-size: 2rem; }
+    .step { grid-template-columns: 44px 1fr; gap: 12px; }
+    .num { width: 44px; height: 44px; font-size: 1.2rem; margin-top: 4px; }
+    .card { padding: 16px 18px; }
+    .features { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hero">
+    <img src="logo.svg" alt="Minivakond logó: piros vakond kukucskál ki a földből">
+    <div>
+      <h1>Minivakond</h1>
+      <p class="tagline">Kérdezz az Excel- és CSV-fájljaidról hétköznapi nyelven. A Claude kiszámolja a választ, és táblázatban, diagramon vagy Excel-fájlban adja vissza.</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h2>Mielőtt elkezded</h2>
+  <div class="card before">
+    <strong>Ezekre lesz szükséged:</strong>
+    <ul>
+      <li>Windows 10/11 a gépeden</li>
+      <li>Claude-előfizetés (Pro, Max, Team vagy Enterprise)</li>
+      <li>Excel vagy CSV adatfájlok, amikről kérdezni szeretnél</li>
+    </ul>
+  </div>
+
+  <h2>Első lépések</h2>
+  <ol class="steps">
+
+    <li class="step" id="lepes-1">
+      <div class="num">1</div>
+      <div class="card">
+        <h3>Telepítsd a Claude Code-ot</h3>
+        <p>Célszerű a Claude asztali alkalmazását használnod: töltsd le, jelentkezz be, és válts Code módba.</p>
+        <a class="btn" href="https://claude.ai/download" target="_blank" rel="noopener">A Claude letöltése</a>
+      </div>
+    </li>
+
+    <li class="step" id="lepes-2">
+      <div class="num">2</div>
+      <div class="card">
+        <h3>Telepítsd a Minivakond bővítményt</h3>
+        <p>Töltsd be a <code>vupdivup/minivakond</code> piacteret, majd telepítsd belőle a <strong>minivakond</strong> bővítményt. Ezt a bővítmények menüben is megteheted, vagy beírhatod ezt a két parancsot:</p>
+        <div class="cmd"><code>/plugin marketplace add vupdivup/minivakond</code><button type="button">Másolás</button></div>
+        <div class="cmd"><code>/plugin install minivakond@minivakond</code><button type="button">Másolás</button></div>
+        <p class="note">Ezt csak egyszer kell megtenni.</p>
+      </div>
+    </li>
+
+    <li class="step" id="lepes-3">
+      <div class="num">3</div>
+      <div class="card">
+        <h3>Nyiss meg egy üres mappát</h3>
+        <p>Hozz létre egy üres mappát (például <code>Dokumentumok\Elemzes</code>), és nyisd meg a Claude Code-ban. Ide kerülnek az adataid és a riportjaid.</p>
+      </div>
+    </li>
+
+    <li class="step" id="lepes-4">
+      <div class="num">4</div>
+      <div class="card">
+        <h3>Állítsd be a Minivakondot</h3>
+        <p>Írd be, hogy <span class="say">minivakond</span>, és a Claude elvégzi a beállítást. Ha engedélyt kér, add meg.</p>
+      </div>
+    </li>
+
+    <li class="step" id="lepes-5">
+      <div class="num">5</div>
+      <div class="card">
+        <h3>Töltsd fel az adataidat, és kérdezz</h3>
+        <p>Csatold az Excel- vagy CSV-fájlt az üzenethez, majd kérdezz, például:</p>
+        <p><span class="say">mennyi volt a forgalom havonta?</span></p>
+        <p>Ha valami nem egyértelmű az adatban, a Claude rákérdez, és a válaszodat szabályként elmenti.</p>
+      </div>
+    </li>
+
+  </ol>
+
+  <h2>Mit tud a Minivakond?</h2>
+  <div class="features">
+    <div class="card">
+      <h3>Válasz táblázatban</h3>
+      <p>Kérdezz, és a Claude kiszámolja a választ az adataidból.</p>
+      <p><span class="say">melyik termék fogyott a legjobban?</span></p>
+    </div>
+    <div class="card">
+      <h3>Diagram</h3>
+      <p>Oszlop-, vonal- vagy kördiagram, amit a böngésződben meg tudsz nyitni.</p>
+      <p><span class="say">rajzold ki a havi forgalmat</span></p>
+    </div>
+    <div class="card">
+      <h3>Riport</h3>
+      <p>Egy teljes dokumentum több diagrammal, táblázattal és szöveges tartalommal.</p>
+      <p><span class="say">készíts riportot a tavalyi évről</span></p>
+    </div>
+    <div class="card">
+      <h3>Excel-export</h3>
+      <p>Bármelyik eredményt Excel-fájlba menti, hogy tovább dolgozhass vele.</p>
+      <p><span class="say">tedd ki Excelbe</span></p>
+    </div>
+    <div class="card">
+      <h3>PDF</h3>
+      <p>A diagramot vagy riportot PDF-be menti nyomtatáshoz vagy e-mailhez.</p>
+      <p><span class="say">csináld meg PDF-ben</span></p>
+    </div>
+  </div>
+
+  <h2>Később</h2>
+  <div class="extra">
+    <div class="card">
+      <h3>Frissítés</h3>
+      <p>Új verzió telepítéséhez írd be a következőt:</p>
+      <div class="cmd"><code>/plugin marketplace update minivakond</code><button type="button">Másolás</button></div>
+    </div>
+    <div class="card">
+      <h3>Valami nem működik?</h3>
+      <p>Írd be, hogy <span class="say">nem működik</span></p>
+      <p>A Claude megkeresi és kijavítja a hibát.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Minivakond · <a href="https://github.com/vupdivup/minivakond">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.cmd button').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.previousElementSibling.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = 'Kimásolva';
+        btn.classList.add('done');
+        setTimeout(() => { btn.textContent = 'Másolás'; btn.classList.remove('done'); }, 1500);
+      } catch {
+        btn.textContent = 'Nem sikerült';
+      }
+    });
+  });
+</script>
+</body>
+</html>
