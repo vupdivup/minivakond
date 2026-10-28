@@ -16,9 +16,9 @@ The goal is a clean `raw_<name>` table, a `v_<name>` view, and a shared understa
 - **Same dataset already exists?** Ask whether this file **replaces** it (e.g. a refreshed full export) or **adds to** it (e.g. a new month).
   - Replace: copy it over `data/raw/<name>.<ext>`.
   - Add: save it as `data/raw/<name>/<name>_<period>.<ext>` and load the folder with a glob.
-- Copy (don't move) the file into `data/raw/` without asking the user. Use the helper script. It works for CSV and Excel, and for files from `inbox/`, attachments or any path:
+- Place the file in `data/raw/` without asking the user. Use the helper script. It works for CSV and Excel, and for files from `inbox/`, attachments or any path:
   `powershell -NoProfile -ExecutionPolicy Bypass -File tools/copy_raw.ps1 '<source>' 'data/raw/<name>.<ext>'`
-  - The script deletes the copy in `inbox/` itself, so the inbox shows only pending files. A source outside the workspace stays where it is.
+  - A file from `inbox/` is moved, so the inbox shows only pending files. This is filing, not deleting (golden rule 6). A file from anywhere else is copied and stays where it is.
   - Don't use Edit/Write for `data/raw/`. The workspace settings deny them there.
 
 ## 2. Look at the raw layout before trusting it
