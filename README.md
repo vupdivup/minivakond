@@ -6,19 +6,16 @@ A Claude Code plugin that lets Hungarian business users ask plain-language quest
 
 ## Getting started
 
-1. Install the plugin:
+Step-by-step guide (in Hungarian): https://vupdivup.github.io/minivakond/
 
-   ```
-   /plugin marketplace add vupdivup/minivakond
-   ```
+Quick version, if you already use Claude Code:
 
-   ```
-   /plugin install minivakond@minivakond
-   ```
+```
+/plugin marketplace add vupdivup/minivakond
+/plugin install minivakond@minivakond
+```
 
-   Run `/plugin marketplace update minivakond` later to get new versions.
-2. Open an empty folder in the **Code** tab and say *„állítsd be”* ("set it up").
-3. Drop a spreadsheet into `inbox/` (or attach it) and start asking questions.
+Then open an empty folder and say *„minivakond”*.
 
 ## How it works
 
