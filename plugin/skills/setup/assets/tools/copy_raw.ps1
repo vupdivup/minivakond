@@ -1,5 +1,6 @@
 # Copies a source file into data/raw/ (the Edit/Write tools are denied there).
-# Run from the workspace folder. A source inside inbox/ is removed after the copy.
+# Run from the workspace folder. A source inside inbox/ is moved (removed after the copy),
+# so the inbox lists only pending files. Any other source stays where it is.
 param(
     [Parameter(Mandatory)][string]$Source,
     [Parameter(Mandatory)][string]$Destination

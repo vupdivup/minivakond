@@ -71,7 +71,7 @@ A workspace is a small data project for **a business user who is not technical**
 3. **Answer questions from `v_*` views only**, not `raw_*` tables. Business rules live in the views, so every answer applies them consistently.
 4. **Record every decision the user makes** before you use it, as the clarify skill describes. Never ask the same question twice.
 5. **State your assumptions.** Every answer that involves a judgement call ends with a short **Feltételezések** list that cites rule IDs (e.g. R-004).
-6. **Never delete the user's files.** If something should be removed, ask.
+6. **Never delete the user's files.** If something should be removed, ask. Exception: the ingest skill moves files from `inbox/` into `data/raw/` with `tools/copy_raw.ps1`. That is filing, not deleting; the file lives on in `data/raw/`.
 7. **Publishing:** charts and reports are published as Artifacts by default. Only aggregated results go into them, never row-level or personal data.
 
 ## Skills
