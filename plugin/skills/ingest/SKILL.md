@@ -14,10 +14,13 @@ The goal is a clean `raw_<name>` table, a `v_<name>` view, and a shared understa
 - Sources: `inbox/`, a file the user attached, or a path they mention.
 - Choose a short snake_case dataset name (e.g. `sales`, `customers`). Confirm it only if it's unclear.
 - **Same dataset already exists?** Ask whether this file **replaces** it (e.g. a refreshed full export) or **adds to** it (e.g. a new month).
-  - Replace: copy it over `data/raw/<name>.<ext>`.
-  - Add: save it as `data/raw/<name>/<name>_<period>.<ext>` and load the folder with a glob.
+  - Replace: copy it over the file it replaces.
+  - Add: every file of the dataset lives in `data/raw/<name>/` as `<name>_<period>.<ext>`, e.g. `sales/sales_2026-10.xlsx`. `<period>` is the period the file covers.
+    - **First add only:** the dataset is still a single file at `data/raw/<name>.<ext>`. Move it into the folder first: create `data/raw/<name>/` (`New-Item -ItemType Directory -Force`), then `Move-Item 'data/raw/<name>.<ext>' 'data/raw/<name>/<name>_<period>.<ext>'`. Take its period from its date column, and ask the user only if it has none. If you skip this, the first period drops out of the load.
+    - Then place the new file in the folder and update the dataset's block in `data/load.sql` to read all of the folder's files (see step 3).
 - Place the file in `data/raw/` from the shell, without asking the user:
   - A file from `inbox/` is moved (`Move-Item`), so the inbox shows only pending files. This is filing, not deleting (golden rule 6).
+  - A file already in `data/raw/` is moved (`Move-Item`) too: the first-add case above. Its contents stay unchanged.
   - A file from anywhere else is copied (`Copy-Item`) and stays where it is.
   - Don't use Edit/Write for `data/raw/`. The workspace settings deny them there, and Write can't copy a binary `.xlsx`.
 
@@ -46,7 +49,11 @@ Explore in `data/scratch.sql`, run as the workspace skill's "Running queries" de
 
 ## 3. Load
 
-1. Append a block to `data/load.sql`: a one-line comment saying what the dataset is and its layout quirks, then `CREATE OR REPLACE TABLE raw_<name> AS SELECT ...`.
+1. Write the dataset's block in `data/load.sql`: a one-line comment saying what the dataset is and its layout quirks, then `CREATE OR REPLACE TABLE raw_<name> AS SELECT ...`.
+   - **One block per dataset.** For a new dataset, append a block. For a replaced or added file, update the existing block. A second `CREATE OR REPLACE TABLE raw_<name>` would silently overwrite the first.
+   - **Folder of period files:**
+     - CSV: one `read_csv('data/raw/<name>/*.csv', union_by_name = true, ...)` reads them all.
+     - Excel: `read_xlsx` given a glob silently reads only the first matching file. Write one `read_xlsx` per file and join them with `UNION ALL BY NAME`; add a line for each new period.
    - Keep cleaning minimal here: fix types and skip junk rows.
    - **Rename every column to ASCII English snake_case** with `AS`, e.g. `"Számla kelte" AS invoice_date`, `"Nettó összeg" AS net_amount`. Accented and space-containing names break queries.
    - Record each mapping (original header → internal name → meaning) under *Adatismertető*, so reports can show the user's original wording.
@@ -57,7 +64,7 @@ Explore in `data/scratch.sql`, run as the workspace skill's "Running queries" de
 
 ## 4. Profile
 
-Run `SUMMARIZE raw_<name>` plus a row count. Then look for problems through the "Where ambiguity hides" lenses in the clarify skill (`${CLAUDE_PLUGIN_ROOT}/skills/clarify/SKILL.md`), querying wherever a lens plausibly applies to this data. Check that the date range matches what the user expects.
+Run `SUMMARIZE raw_<name>` plus a row count. Then look for problems through the "Where ambiguity hides" lenses in the clarify skill (`${CLAUDE_PLUGIN_ROOT}/skills/clarify/SKILL.md`), querying wherever a lens plausibly applies to this data. Check that the date range matches what the user expects. For a dataset with period files, count rows per period and check that every file shows up.
 
 Then work out what this file can and cannot answer. For example, rates or per-person averages need a full population, and "remaining" or "vs. target" questions need a budget, target or entitlement. Note what's missing.
 

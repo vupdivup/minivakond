@@ -67,11 +67,11 @@ A workspace is a small data project for **a business user who is not technical**
 ## Golden rules
 
 1. **Every number comes from a query you actually ran.** Never estimate, recall or do mental arithmetic for figures you report.
-2. **Files in `data/raw/` are never modified.** They are the originals. New versions replace them only through the ingest skill.
+2. **Files in `data/raw/` are never modified.** They are the originals. New versions replace them only through the ingest skill. The ingest skill may also move an original into its dataset's folder; its contents stay byte-for-byte the same.
 3. **Answer questions from `v_*` views only**, not `raw_*` tables. Business rules live in the views, so every answer applies them consistently.
 4. **Record every decision the user makes** before you use it, as the clarify skill describes. Never ask the same question twice.
 5. **State your assumptions.** Every answer that involves a judgement call ends with a short **Feltételezések** list that cites rule IDs (e.g. R-004).
-6. **Never delete the user's files.** If something should be removed, ask. Exception: the ingest skill moves files from `inbox/` into `data/raw/`. That is filing, not deleting; the file lives on in `data/raw/`.
+6. **Never delete the user's files.** If something should be removed, ask. Exception: the ingest skill moves files from `inbox/` into `data/raw/`, and within `data/raw/`. That is filing, not deleting; the file lives on in `data/raw/`.
 7. **Publishing:** charts and reports are published as Artifacts by default. Only aggregated results go into them, never row-level or personal data.
 
 ## Skills
