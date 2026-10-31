@@ -1,6 +1,11 @@
 -- One block per dataset, maintained by the ingest skill.
--- Each block loads one file from data/raw/ into a raw_<name> table.
--- Example:
+-- Each block loads a dataset from data/raw/ into a raw_<name> table.
+-- Example (single file):
 -- -- sales: monthly sales export from the ERP (sheet "Data", header on row 3)
 -- CREATE OR REPLACE TABLE raw_sales AS
 -- SELECT * FROM read_xlsx('data/raw/sales.xlsx', sheet = 'Data', range = 'A3:M100000', header = true);
+-- Example (one Excel file per period; read_xlsx can't read a glob, so list each file):
+-- CREATE OR REPLACE TABLE raw_sales AS
+-- SELECT * FROM read_xlsx('data/raw/sales/sales_2026-10.xlsx', sheet = 'Data', range = 'A3:M100000', header = true)
+-- UNION ALL BY NAME
+-- SELECT * FROM read_xlsx('data/raw/sales/sales_2026-11.xlsx', sheet = 'Data', range = 'A3:M100000', header = true);
