@@ -64,8 +64,9 @@ if ($tmpl -notmatch '(?s)// @@DATA.*// @@END') { throw 'report_template.html has
 $html = [regex]::Replace($tmpl, '(?s)// @@DATA.*?// @@END',
     [Text.RegularExpressions.MatchEvaluator] { "// @@DATA`n$data`n// @@END" })
 $title = [Net.WebUtility]::HtmlEncode($s.title)
-$html = [regex]::Replace($html, '<title>.*?</title>',
-    [Text.RegularExpressions.MatchEvaluator] { "<title>$title</title>" })
+# Only the first <title> (in <head>); the footer logo has its own.
+$html = ([regex]'<title>.*?</title>').Replace($html,
+    [Text.RegularExpressions.MatchEvaluator] { "<title>$title</title>" }, 1)
 $generator = [Net.WebUtility]::HtmlEncode("Minivakond $version".Trim())
 $html = [regex]::Replace($html, '<meta name="generator" content=".*?">',
     [Text.RegularExpressions.MatchEvaluator] { "<meta name=`"generator`" content=`"$generator`">" })
