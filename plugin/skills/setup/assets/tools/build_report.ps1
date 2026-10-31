@@ -51,15 +51,25 @@ $results = foreach ($f in $sqlFiles) {
     "$(ConvertTo-Json $f): $json"
 }
 
+# Build date for the footer; plugin version from the workspace marker, for <meta name="generator">.
+$built   = Get-Date -Format 'yyyy-MM-dd'
+$marker  = Join-Path (Split-Path $PSScriptRoot -Parent) '.claude\minivakond-version'
+$version = if (Test-Path $marker) { ([IO.File]::ReadAllText($marker)).Trim() } else { '' }
+$build   = ConvertTo-Json -Compress @{ date = $built; version = $version }
+
 # '</' inside a JSON string would end the <script> block early; '<\/' is the same string.
-$data = "const SPEC = $specText;`nconst RESULTS = {`n$($results -join ",`n")`n};" -replace '</', '<\/'
+$data = "const SPEC = $specText;`nconst RESULTS = {`n$($results -join ",`n")`n};`nconst BUILD = $build;" -replace '</', '<\/'
 $tmpl = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'report_template.html'))
 if ($tmpl -notmatch '(?s)// @@DATA.*// @@END') { throw 'report_template.html has no DATA markers; re-run setup' }
 $html = [regex]::Replace($tmpl, '(?s)// @@DATA.*?// @@END',
     [Text.RegularExpressions.MatchEvaluator] { "// @@DATA`n$data`n// @@END" })
 $title = [Net.WebUtility]::HtmlEncode($s.title)
-$html = [regex]::Replace($html, '<title>.*?</title>',
-    [Text.RegularExpressions.MatchEvaluator] { "<title>$title</title>" })
+# Only the first <title> (in <head>); the footer logo has its own.
+$html = ([regex]'<title>.*?</title>').Replace($html,
+    [Text.RegularExpressions.MatchEvaluator] { "<title>$title</title>" }, 1)
+$generator = [Net.WebUtility]::HtmlEncode("Minivakond $version".Trim())
+$html = [regex]::Replace($html, '<meta name="generator" content=".*?">',
+    [Text.RegularExpressions.MatchEvaluator] { "<meta name=`"generator`" content=`"$generator`">" })
 
 [IO.File]::WriteAllText($outPath, $html, $utf8)
 "built $outPath"
