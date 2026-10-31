@@ -77,7 +77,8 @@
 <main></main>
 <footer><div>
   <!-- Simplified docs/logo.svg for small sizes: no ground dots or eye, bigger nose, thicker lines. -->
-  <svg viewBox="0 0 400 400" aria-hidden="true">
+  <svg viewBox="0 0 400 400" role="img">
+    <title>Minivakond</title>
     <defs>
       <clipPath id="logo-frame"><rect x="12" y="12" width="376" height="376" rx="64"/></clipPath>
       <g id="logo-mole">
@@ -94,7 +95,7 @@
     </g>
     <rect x="12" y="12" width="376" height="376" rx="64" fill="none" stroke="#111" stroke-width="22"/>
   </svg>
-  <span class="made">Minivakond</span>
+  <span class="made"></span>
 </div></footer>
 
 <script>
@@ -306,7 +307,7 @@ try {
   main.append(el("p", "error", "Hiba a riport megjelenítésekor: " + e.message));
 }
 if (BUILD.date) {
-  document.querySelector("footer .made").textContent = "Készült: " + FORMATS.date(BUILD.date) + " · Minivakond";
+  document.querySelector("footer .made").textContent = "Készült: " + FORMATS.date(BUILD.date);
 }
 
 // Redraw every chart when the colour scheme changes, from the OS or the host page.
