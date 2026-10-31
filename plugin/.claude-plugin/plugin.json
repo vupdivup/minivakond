@@ -1,7 +1,7 @@
 {
   "name": "minivakond",
   "displayName": "Minivakond",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Ask questions about your spreadsheets in plain language. Loads CSV/Excel files, clarifies business rules with you, and builds answers, charts and reports.",
   "author": {
     "name": "Mátyás Verseghi-Nagy",

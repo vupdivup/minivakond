@@ -1,6 +1,6 @@
 # Creates or repairs a Minivakond workspace in the current folder.
-# Safe to re-run: user files (rules, data, reports) are only created when missing;
-# plugin-owned files (tools/*.ps1, tools/report_template.html, .claude/settings.json,
+# Safe to re-run: user files (rules, data, reports, .claude/settings.json) are only
+# created when missing; plugin-owned files (tools/*.ps1, tools/report_template.html,
 # .claude/minivakond-version) are always refreshed.
 $ErrorActionPreference = 'Stop'
 $assets  = Join-Path $PSScriptRoot 'assets'
@@ -14,7 +14,7 @@ foreach ($d in 'inbox', 'data\raw', 'rules', 'reports', 'tools', '.claude') {
 
 # User-owned starter files: create only if missing.
 $starters = 'data\load.sql', 'data\build.sql', 'rules\views.sql', 'rules\business_rules.md',
-            'reports\log.md'
+            'reports\log.md', '.claude\settings.json'
 foreach ($f in $starters) {
     if (-not (Test-Path $f)) { Copy-Item (Join-Path $assets $f) $f; "created  $f" }
 }
@@ -30,11 +30,6 @@ if (-not (Test-Path 'CLAUDE.md')) {
 # Plugin-owned helper scripts and report template: always refresh.
 Copy-Item (Join-Path $assets 'tools\*') 'tools' -Force
 "refreshed tools\"
-
-# Plugin-owned permissions: always overwrite, so upgrades can add and remove rules.
-# User-specific permissions belong in .claude\settings.local.json, which setup never touches.
-Copy-Item (Join-Path $assets '.claude\settings.json') '.claude\settings.json' -Force
-"refreshed .claude\settings.json"
 
 if (-not (Test-Path 'tools\duckdb.exe')) {
     "installing duckdb..."

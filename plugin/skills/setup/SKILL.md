@@ -6,8 +6,8 @@ description: Creates a new "Minivakond" workspace in the current folder, or repa
 # Setup / doctor
 
 Setup is safe to run any number of times.
-- **The user's files are created only when missing, never overwritten:** rules, data, reports.
-- **The plugin's own files are always refreshed:** the helper scripts and report template in `tools/`, `.claude/settings.json`, and the version marker. User-specific permissions belong in `.claude/settings.local.json`, which setup never touches.
+- **The user's files are created only when missing, never overwritten:** rules, data, reports, `.claude/settings.json`.
+- **The plugin's own files are always refreshed:** the helper scripts and report template in `tools/`, and the version marker.
 
 ## Steps
 
@@ -18,7 +18,7 @@ Setup is safe to run any number of times.
 
    It does four things:
    - creates the folders and missing starter files (including `CLAUDE.md`)
-   - refreshes the helper scripts and the report template in `tools/`, and `.claude/settings.json`
+   - refreshes the helper scripts and the report template in `tools/`
    - downloads the DuckDB command-line tool into `tools/` if it's missing
    - writes `.claude/minivakond-version`
 
@@ -29,9 +29,7 @@ Setup is safe to run any number of times.
    - If the build fails, `data/work.duckdb` is disposable: delete it and retry once.
    - If it still fails, the error is almost always in a block in `load.sql` or `views.sql`. Show the user which dataset or rule broke, in plain words, and offer to fix it.
 
-4. **New workspace only:** the permission settings in `.claude/settings.json` take effect from the next session. Until then, the user may see a few approval prompts.
-
-5. **Report**, in the user's language (Hungarian by default). Give a one-line status ("Minden kész — jöhet az első fájl!" or what was fixed or updated). If this is a new workspace, briefly explain how to work here:
+4. **Report**, in the user's language (Hungarian by default). Give a one-line status ("Minden kész — jöhet az első fájl!" or what was fixed or updated). If this is a new workspace, briefly explain how to work here:
    - drop spreadsheets into the `inbox` folder, or attach them in the chat
    - ask questions in their own words
    - you'll ask about anything ambiguous and remember the answers
