@@ -21,10 +21,11 @@ Claude Code plugin that lets non-technical (mostly Hungarian) business users que
 
 - **Workspace** = a user folder marked by `.claude/minivakond-version`. Not this repo.
 - **Two instruction files**: this `AGENTS.md` (dev) vs. `plugin/skills/setup/assets/CLAUDE.md.tmpl` (installed into user workspaces as `CLAUDE.md`). Don't mix them up.
-- **File ownership in a workspace**: user-owned starters are created only if missing; plugin-owned files (files from `assets/tools/`, `.claude/settings.json`, version marker) are always overwritten. Keep this split when adding assets.
+- **File ownership in a workspace**: user-owned starters (including `.claude/settings.json`) are created only if missing; plugin-owned files (files from `assets/tools/`, version marker) are always overwritten. Keep this split when adding assets.
+- **Permissions**: users are expected to run in auto mode, so the workspace `settings.json` has no allow list, only a deny rule that keeps `data/raw/` read-only for Edit/Write. Changes to it don't reach existing workspaces.
 - **Versioning**: merging to `main` ships to users, but `/plugin marketplace update` only picks up a new `plugin.json` `version`. Bump it in every PR that changes `plugin/`. Workspaces also re-run setup when their marker differs from this version.
 - **DuckDB**: not expected on PATH. `setup.ps1` runs `tools/install_duckdb.ps1` when `tools/duckdb.exe` is missing; it downloads a pinned Windows CLI release (`$version` in that script) from GitHub into the workspace's `tools/`. To upgrade, check the release's asset names first; v2.0.0 renamed them. Skills always call it as `./tools/duckdb.exe`.
-- **PowerShell**: helper scripts run under stock Windows PowerShell 5.1 (`powershell`, not `pwsh`), so avoid 7+ syntax (`&&`, `??`, ternary). Skills invoke them as `powershell -NoProfile -ExecutionPolicy Bypass -File tools/<script>.ps1`, and `assets/.claude/settings.json` allow-lists that exact prefix. When you add a script, add its allow entry too.
+- **PowerShell**: helper scripts run under stock Windows PowerShell 5.1 (`powershell`, not `pwsh`), so avoid 7+ syntax (`&&`, `??`, ternary). Skills invoke them as `powershell -NoProfile -ExecutionPolicy Bypass -File tools/<script>.ps1`.
 - User-facing text is Hungarian (chat may follow the user's language, files and reports may not); internal names (tables, columns, folders) are ASCII English snake_case.
 - Files are UTF-8 without BOM (Hungarian accents). PowerShell's `Get-Content` may display them garbled; that's a display issue, not file corruption.
 

@@ -1,16 +1,5 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(./tools/duckdb.exe:*)",
-      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -File tools/list_sheets.ps1:*)",
-      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -File tools/build_report.ps1:*)",
-      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -File tools/copy_raw.ps1:*)",
-      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -File tools/export_pdf.ps1:*)",
-      "Edit(./rules/**)",
-      "Edit(./reports/**)",
-      "Edit(./data/load.sql)",
-      "Edit(./data/scratch.sql)"
-    ],
     "deny": [
       "Edit(./data/raw/**)"
     ]
