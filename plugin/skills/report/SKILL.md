@@ -42,6 +42,8 @@ Follow the `workspace` skill's conventions; load it first if it isn't loaded yet
 
 **Deliver what was asked.** A chart request gets a chart page: one section with one chart, plus title, as-of date and assumptions. No KPIs, extra charts or tables. Offer those as the follow-up suggestion (6.4) instead.
 
+**A report page reads on its own.** Someone who opens it without the chat should get the findings, the reasoning behind them and the caveats, so each section's `text` explains the chart or table (see `text` in the spec). Chart pages stay minimal, as above.
+
 1. Read `${CLAUDE_SKILL_DIR}/spec.md` for the spec format.
 2. Write the SQL files (see 2) and `reports/<folder>/report.json` with the Write tool. All text in the spec is Hungarian, with the user's terms from the *Szótár*.
 3. Build the page:
@@ -53,6 +55,7 @@ Follow the `workspace` skill's conventions; load it first if it isn't loaded yet
    - After publishing, always call the Artifact tool with `action: "open"` and the URL from the publish result, so the page shows without a click. This overrides the tool's default guidance that a fresh publish needs no `open`.
    - If the Artifact tool isn't available or publishing fails, open it locally: `start reports/<folder>/report.html` (Bash) or `Invoke-Item reports/<folder>/report.html` (PowerShell).
    - **Only aggregated numbers go into published pages.** No row-level or personal data, ever.
+   - **Published pages stand on their own.** People who open the link have no access to the workspace. Text on the page must not refer to local files or folders, other outputs (Excel exports, internal pages) or the chat; put those references in the chat reply. Source file names in `source` (*Forrás*) are fine.
 5. **PDF, only when asked** ("PDF-ben", "nyomtatható", "csatolni akarom"):
    `powershell -NoProfile -ExecutionPolicy Bypass -File tools/export_pdf.ps1 reports/<folder>/report.html`
    - It writes `report.pdf` next to the page (A4 portrait). Give the user its path; don't publish the PDF.

@@ -43,7 +43,7 @@ Parts that are left out don't render at all, including their headings.
 
 ## `sections`
 
-Each section is an object with any of: `heading`, `text` (a short paragraph), `chart`, `table`.
+Each section is an object with any of: `heading`, `text` (a few sentences: what the chart or table shows, what stands out, and a likely reason or caveat), `chart`, `table`.
 
 - `heading` states the main finding, e.g. "Februárban volt a csúcs", not "Havi árbevétel".
 - Any figures in `heading` or `text` must come from query results you ran.
