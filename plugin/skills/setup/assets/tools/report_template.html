@@ -61,9 +61,10 @@
     footer { max-width: none; padding: 0; }
     .chart, .print-host { display: none !important; }
     .print-img { display: block; width: 100%; height: auto; }
+    /* Tighter tables keep wide ones within the page; fitTables() scales down any that still overflow. */
     .table-wrap { overflow: visible; }
-    table { font-size: 12px; }
-    th, td { white-space: normal; padding: 6px 8px; }
+    table { font-size: 11px; }
+    th, td { white-space: normal; padding: 4px 6px; font-size: inherit; }
     .card, .kpi, tr { break-inside: avoid; }
     h2 { break-after: avoid; }
   }
@@ -303,6 +304,20 @@ for (const { img, spec } of charts) {
   box.remove();
 }
 printHost.remove();
+
+// In print, a table wider than its card even after wrapping is scaled down to fit, so no column is clipped.
+// Runs whenever print media toggles, when the page is already laid out for paper.
+const printMedia = matchMedia("print");
+const fitTables = () => {
+  for (const t of main.querySelectorAll("table")) {
+    t.style.zoom = "";
+    if (!printMedia.matches) continue;
+    const box = getComputedStyle(t.parentElement);
+    const room = t.parentElement.clientWidth - parseFloat(box.paddingLeft) - parseFloat(box.paddingRight);
+    if (t.offsetWidth > room) t.style.zoom = room / t.offsetWidth;
+  }
+};
+printMedia.addEventListener("change", fitTables);
 
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawAll);
 new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
